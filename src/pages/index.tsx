@@ -1,4 +1,4 @@
+// src/pages/index.tsx
+import Login from './login';
 
-export default function Home() {
-  return <h1>Hello from Next.js!</h1>;
-}
+export default Login;
