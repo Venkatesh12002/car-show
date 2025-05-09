@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('API working 🚀');
+  res.send('API working.. 🚀');
 });
 
 const PORT = process.env.PORT || 5000;
