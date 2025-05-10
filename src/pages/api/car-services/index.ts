@@ -1,17 +1,45 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 
-const CAR_SERVICES_API = 'http://localhost:5000/api/car-services';
+const CAR_SERVICES_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export interface CarService {
+  serviceId: string;
+  serviceName: string;
+  description: string;
+  price: string;
+  img_url: string;
+  duration: string;
+}
+
+export interface ApiResponse {
+  success: boolean;
+  message: string;
+  data: CarService[];
+}
+
+export const getCarServices = async (): Promise<ApiResponse> => {
   try {
-    const response = await axios.get(CAR_SERVICES_API);
-    res.status(200).json(response.data);
+    const response = await axios.get<ApiResponse>(
+      `${CAR_SERVICES_API}/car-services`,
+      // {
+      //   withCredentials: true,
+      // }
+    );
+    return response.data;
   } catch (error) {
     console.error('Error fetching car services:', error);
-    res.status(500).json({ error: 'Failed to fetch car services' });
+    throw error;
   }
-}
+};
+
+export const getCarServiceById = async (serviceId: string): Promise<ApiResponse> => {
+  try {
+    const response = await axios.get<ApiResponse>(
+      `${CAR_SERVICES_API}/car-services/${serviceId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching car services:', error);
+    throw error;
+  }
+};

@@ -4,37 +4,26 @@ import Image from "next/image";
 import { isApiError } from "@/types/error";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { CarService, getCarServices } from "@/pages/api/car-services";
+import { useRouter } from "next/router";
 
-interface CarService {
-  serviceId: string;
-  serviceName: string;
-  description: string;
-  price: string;
-  img_url: string;
-  duration: string;
-}
 
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: CarService[];
-}
+
 
 export default function Dashboard() {
   const [services, setServices] = useState<CarService[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch("/api/car-services");
-        const data: ApiResponse = await response.json();
-
-        if (data.success) {
-          setServices(data.data);
+        const response = await getCarServices();
+        if (response.success) {
+          setServices(response.data);
         } else {
-          setError("Failed to fetch services");
+          setError(response.message || "Failed to fetch services");
         }
       } catch (err) {
         if (err instanceof Error) {
@@ -59,6 +48,10 @@ export default function Dashboard() {
   if (error) {
     return <div>Error: {error}</div>;
   }
+
+  const handleViewDetails = (serviceId: string) => {
+    router.push(`/dashboard/view-service?serviceId=${serviceId}`);
+  };
 
   return (
     <>
@@ -117,6 +110,7 @@ export default function Dashboard() {
                     <FontAwesomeIcon icon={faEye} height={15} width={15} />
                   }
                   sx={{fontSize:'0.8rem'}}
+                  onClick={()=>handleViewDetails(service.serviceId)}
                 >
                   View Details
                 </Button>
