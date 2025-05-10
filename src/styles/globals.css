@@ -4,3 +4,7 @@
   font-family: var(--font-primary) !important;
   color: var(--color-text);
 }
+
+div[style*="bottom: 0px"][style*="left: 0px"] {
+  display: none !important;
+}
