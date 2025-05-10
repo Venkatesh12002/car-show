@@ -10,10 +10,11 @@ import {
   Avatar,
   Box,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import breadcrumbNameMap from "@/utils/breadcrumbs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   toggleDrawer: () => void;
@@ -41,20 +42,37 @@ export default function Navbar({ toggleDrawer }: Props) {
   );
 
   return (
-    <AppBar position="static">
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+    <AppBar position="relative">
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          color: "var(--color-background)",
+          backgroundColor: "var(--color-primary)",
+        }}
+      >
         <Box display="flex" alignItems="center">
-          <IconButton color="inherit" edge="start" onClick={toggleDrawer}>
-            <MenuIcon />
+          <IconButton
+            sx={{ color: "var(--color-background)" }}
+            edge="start"
+            onClick={toggleDrawer}
+            
+          >
+            <FontAwesomeIcon icon={faBars} width={16} height={16} style={{color:"#fff"}}/>
           </IconButton>
-          <Breadcrumbs color="white" sx={{ ml: 1 }}>
-            <Link underline="hover" color="inherit" href="/">
+          <Breadcrumbs sx={{ ml: 1 }}>
+            <Link underline="hover" color="var(--color-background)" href="/">
               Home
             </Link>
             {pathnames.map((value, index) => {
               const to = "/" + pathnames.slice(0, index + 1).join("/");
               return (
-                <Link underline="hover" color="inherit" key={to} href={to}>
+                <Link
+                  underline="hover"
+                  color="var(--color-background)"
+                  key={to}
+                  href={to}
+                >
                   {breadcrumbNameMap[to] || value}
                 </Link>
               );
@@ -64,7 +82,10 @@ export default function Navbar({ toggleDrawer }: Props) {
 
         {/* Profile Dropdown */}
         <Box>
-          <IconButton color="inherit" onClick={handleMenuOpen}>
+          <IconButton
+            sx={{ color: "var(--color-background)" }}
+            onClick={handleMenuOpen}
+          >
             <Avatar alt="User" />
           </IconButton>
           <Menu
